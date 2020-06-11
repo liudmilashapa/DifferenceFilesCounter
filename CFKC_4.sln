@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CFKC_4", "CFKC_4\CFKC_4.vcxproj", "{87557EA7-79A4-4D7C-AE9C-47A080B751B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87557EA7-79A4-4D7C-AE9C-47A080B751B7}.Debug|x64.ActiveCfg = Debug|x64
+		{87557EA7-79A4-4D7C-AE9C-47A080B751B7}.Debug|x64.Build.0 = Debug|x64
+		{87557EA7-79A4-4D7C-AE9C-47A080B751B7}.Release|x64.ActiveCfg = Release|x64
+		{87557EA7-79A4-4D7C-AE9C-47A080B751B7}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A8D6825B-98FB-4BD7-9AA8-5F37911C9067}
+	EndGlobalSection
+EndGlobal
