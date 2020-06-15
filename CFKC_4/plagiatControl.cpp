@@ -33,7 +33,7 @@
     }
 
 
-    void PlagiatControl::setIntersection()
+    void PlagiatControl::setCommonIntersection()
     {
         if (m_allFileSet.size() == 1)
         {
@@ -46,16 +46,67 @@
      
     }
 
-    void PlagiatControl::setMerge()
+    void PlagiatControl::setCommonMerge()
     {
-        std::set<std::wstring>tempSet;
-        for (int i = 0; i < m_filePathes.size() ; i++)
+       /* std::set<std::wstring>tempSet;*/
+        for (int i = 0; i < m_filePathes.size()-1 ; i++)
         {
-            tempSet = m_allFileSet[i];
-            m_mergeSet.merge(tempSet);
+            m_mergeSet.merge(getMerge(m_allFileSet[i], m_allFileSet[i+1]));
+            //tempSet = m_allFileSet[i];
+            //m_mergeSet.merge(tempSet);
         }
-
     }
+
+    std::set<std::wstring>  PlagiatControl::getIntersection(std::set<std::wstring> & _firstFile, std::set<std::wstring> & _secondFile)
+    {
+        std::set<std::wstring> resultSet ;
+        std::set_intersection(_firstFile.begin(), _firstFile.end(), _secondFile.begin(), _secondFile.end(), std::inserter(resultSet, resultSet.begin()));
+        return resultSet;
+    }
+
+    void PlagiatControl::setSeparateDiff()
+    { 
+        std::vector <double> tempVector;
+        for (int i = 0; i < m_allFileSet.size(); i++)
+        {
+           
+            for (int j = 0; j < m_allFileSet.size(); j++)
+            {      
+                tempVector.push_back(getDifference(  getMerge(m_allFileSet[i], m_allFileSet[j]),getIntersection(m_allFileSet[i], m_allFileSet[j])));
+            }
+            m_differences.push_back(tempVector);
+            tempVector.clear();
+        }
+    }
+
+    double PlagiatControl::getDifference(std::set<std::wstring>& _mergeSet, std::set<std::wstring>& _intersectionSet)
+    {
+          return (float)((float)(_mergeSet.size() - _intersectionSet.size()) / (float)_mergeSet.size());
+    }
+
+    double PlagiatControl::getSimilarity(std::set<std::wstring>& _mergeSet, std::set<std::wstring>& _intersectionSet)
+    {
+        return (float)((float)_intersectionSet.size() / (float)_mergeSet.size());
+    }
+
+    double PlagiatControl::getDifference()
+    {
+        return m_Dif;
+    }
+
+    double PlagiatControl::getSimilarity()
+    {
+        return m_Same;
+    }
+
+    std::set<std::wstring> PlagiatControl::getMerge(std::set<std::wstring>& _firstFile, std::set<std::wstring>& _secondFile)
+    {
+        std::set<std::wstring> resultSet=_secondFile;
+        std::set<std::wstring> tempSet=_firstFile;
+        resultSet.merge(tempSet);
+        return resultSet;
+    }
+
     void PlagiatControl::setPath(QString  & _firstPath)
     {
         if (std::find(m_filePathes.begin(), m_filePathes.end(), _firstPath.toStdString()) == m_filePathes.end())
@@ -64,11 +115,32 @@
         }
     }
 
+    QString PlagiatControl::getAllPathesQString()
+    {
+        QString temp;
+        for (int i = 0; i < m_filePathes.size(); i++)
+        {
+            temp.append(QString::number(i + 1));
+            temp.append(". ");
+
+            temp.append(QString::fromStdString(m_filePathes.at(i)));
+            if (i != m_filePathes.size() - 1)
+            {
+                temp.append("\n");
+            }
+        }
+        return temp;
+    }
+
     int PlagiatControl::getNumFilePath()
     {
         return m_filePathes.size();
     }
 
+    QVector<std::vector<double>>& PlagiatControl::getSeparateDiff()
+    {
+        return m_differences;
+    }
 
     void PlagiatControl::clickReset()
     {
@@ -91,6 +163,7 @@
         m_NormalA = 0;
         m_NormalB = 0;
         m_allFileSet.clear();
+        m_differences.clear();
         m_mergeSet.clear();
         m_intersectionSet.clear();
 
@@ -99,18 +172,11 @@
             std::wifstream fileStream(m_filePathes[i]);
             insertWordsFromFile(fileStream, m_allFileSet);
         }
-        setIntersection();
-        setMerge();
-       
-        m_Same = (float)((float)m_intersectionSet.size() / (float)m_mergeSet.size());
-        m_Dif = (float)((float)(m_mergeSet.size()- m_intersectionSet.size()) / (float)m_mergeSet.size());
-
-        {
-
-            emit DifChanged(QString::number(m_Dif, 'f', 3));
-            emit SameChanged(QString::number(m_Same, 'f', 3));
-
-        }
+        setCommonIntersection();
+        setCommonMerge();
+        m_Dif = getDifference(m_mergeSet, m_intersectionSet);
+        m_Same = getSimilarity(m_mergeSet, m_intersectionSet);   
+        setSeparateDiff();
     }
 
 

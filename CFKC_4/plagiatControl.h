@@ -24,7 +24,8 @@ private:
 
     std::set<std::wstring> m_mergeSet;
     std::set<std::wstring> m_intersectionSet;
-
+    QVector<std::vector<double>> m_differences;
+    
     std::vector <std::string>  m_filePathes;
 
     double  m_Dif;
@@ -40,17 +41,34 @@ public:
     std::wstring s2ws(const std::string& str);
 
     void insertWordsFromFile(std::wifstream& fileStream, std::vector<std::set<std::wstring>>& _Set);
-    void setIntersection();
-    void setMerge();
+    
+    void setCommonIntersection();
+    void setCommonMerge();
+    
+    std::set<std::wstring>  getIntersection(std::set<std::wstring>& _firstFile, std::set<std::wstring>& _secondFile);
+    std::set<std::wstring>  getMerge(std::set<std::wstring>& _firstFile, std::set<std::wstring>& _secondFile);
+
+    void setSeparateDiff();
+
+    double getDifference(std::set<std::wstring>& _mergeSet, std::set<std::wstring>& _intersectionSet);
+    double getSimilarity(std::set<std::wstring>& _mergeSet, std::set<std::wstring>& _intersectionSet);
+
+    double getDifference();
+    double getSimilarity();
+
 
     void setPath(QString & _firstPath);
 
     int getNumFilePath();
+    QString getAllPathesQString();
 
-public slots:
+    QVector<std::vector<double>>& getSeparateDiff();
 
     void clickResult();
     void clickReset();
+
+public slots:
+
 
 
 signals:

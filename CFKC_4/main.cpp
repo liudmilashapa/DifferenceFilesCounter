@@ -12,14 +12,14 @@ int main(int argc, char *argv[])
     window->setAutoFillBackground(false);
     QWidget * newW =  new QWidget(window);
   //  newW->resize(minimumSizeHint());
-  //  newW->resize(150,200);
+  newW->resize(150,200);
 
 
     QObject::connect(window->m_resultButtton, SIGNAL(clicked()),
-        window->m_plagiatControl, SLOT(clickResult())
+        window, SLOT(clickResultButtton())
     );
     QObject::connect(window->m_resetButtton, SIGNAL(clicked()),
-        window->m_plagiatControl, SLOT(clickReset())
+        window, SLOT(clickResetButtton())
     );
     QObject::connect(window->m_browseFirstFileButtton, SIGNAL(clicked()),
         window, SLOT(clickBrowseFileButtton())

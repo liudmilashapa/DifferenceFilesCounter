@@ -41,8 +41,12 @@ public:
     QLabel* m_constNormalB;
     QLabel* m_constNumFileAdded;
     QLabel* m_numFileAdded;
+    QFont qfontPrimary;
+    QFont qfontSecondary;
+    QLabel* m_descriptionCommonDiff;
+    QLabel* m_descriptionSeparateDiff;
 
-    QLineEdit* m_firstPathLineEdit;
+    QLabel* m_firstPathLineEdit;
 
 	QPushButton* m_resultButtton;
     QPushButton* m_resetButtton;
@@ -59,21 +63,35 @@ public:
     QBoxLayout* m_similarityBoxLayout;
     QBoxLayout* m_buttonBoxLayout;
     QBoxLayout* m_lableBoxLayout;
+    QBoxLayout* m_tableBoxLayout;
+
+    QTableWidget* m_table = nullptr;
+
+    /*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
+
 
 	void createMainBox();
 
-	void createResultBox(QBoxLayout & _mainBoxLayout);
-    void createPathInputBox(QBoxLayout&  _mainBoxLayout);
-    void createLableBox(QBoxLayout& _mainBoxLayout);
-    void createButtonBox(QBoxLayout& _mainBoxLayout);
+    QBoxLayout* createResultBox();
+    QBoxLayout* createPathInputBox();
+    QBoxLayout* createLableBox();
+    QBoxLayout* createButtonBox();
+
+    void addDisplatInfoTable();
+    void displayTable();
+
     PlagiatControl * m_plagiatControl;
+
+    /*-----------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 public slots:
 
     void clickBrowseFileButtton();
+    void clickResultButtton();
+    void clickResetButtton();
 
 private:
 
-
     Ui::CFKC_4Class ui;
+
 };
